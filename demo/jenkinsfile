@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        // Variables d'environnement
+        MAVEN_HOME = tool name: 'Maven 3', type: 'maven'
+        JAVA_HOME = tool name: 'JDK 17', type: 'jdk'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Récupère le code du dépôt
+                git 'https://github.com/username/my-spring-boot-app.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compile l'application avec Maven
+                sh "${MAVEN_HOME}/bin/mvn clean package"
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Exécute les tests unitaires
+                sh "${MAVEN_HOME}/bin/mvn test"
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Construit une image Docker à partir du Dockerfile
+                sh 'docker build -t my-spring-boot-app .'
+            }
+        }
+
+        stage('Deploy to Docker') {
+            steps {
+                // Déploie le conteneur Docker
+                sh 'docker run -d -p 8080:8080 my-spring-boot-app'
+            }
+        }
+    }
+
+    post {
+        success {
+            // Notification ou action en cas de succès du pipeline
+            echo 'Pipeline terminé avec succès.'
+        }
+        failure {
+            // Notification ou action en cas d'échec du pipeline
+            echo 'Pipeline échoué.'
+        }
+    }
+}
