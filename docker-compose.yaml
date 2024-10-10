@@ -4,7 +4,7 @@ services:
   springboot-app:
     image: my-spring-boot-app
     build:
-      context: .
+      context: demo-
       dockerfile: Dockerfile.yaml
     ports:
       - "8080:8080"
