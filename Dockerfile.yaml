@@ -1,0 +1,7 @@
+FROM openjdk:17
+
+WORKDIR /ballo
+
+COPY demo/target/demo-0.0.1-SNAPSHOT.jar /ballo/demo.jar
+
+ENTRYPOINT ["java", "-jar", "/ballo/demo.jar"]
