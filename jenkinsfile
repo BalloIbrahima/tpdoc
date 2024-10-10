@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Variables d'environnement
-        MAVEN_HOME = tool name: 'Maven 3', type: 'maven'
-        JAVA_HOME = tool name: 'JDK 17', type: 'jdk'
+//         MAVEN_HOME = tool name: 'Maven 3', type: 'maven'
+//         JAVA_HOME = tool name: 'JDK 17', type: 'jdk'
     }
 
     stages {
