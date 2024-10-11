@@ -28,6 +28,12 @@ pipeline {
                     sh 'mvn clean install -DskipTests'
                 }
             }
+
+            stage('Build docker and start') {
+                steps {
+                   sh 'docker compose up'
+                }
+            }
     }
 
     post {
