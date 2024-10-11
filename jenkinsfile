@@ -6,47 +6,28 @@ pipeline {
 //         MAVEN_HOME = tool name: 'Maven 3', type: 'maven'
 //         JAVA_HOME = tool name: 'JDK 17', type: 'jdk'
     }
-
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Récupère le code du dépôt
-                git branch: 'main', url: 'https://github.com/BalloIbrahima/tpdoc.git'
-                //git 'https://github.com/BalloIbrahima/tpdoc.git'
+            stage('Récupère le code du dépôt') {
+                steps {
+                    // Récupère le code du dépôt
+                    git branch: 'main', url: 'https://github.com/BalloIbrahima/tpdoc.git'
+                    //git 'https://github.com/BalloIbrahima/tpdoc.git'
+                }
             }
-        }
-
-        stage('Build') {
-            steps {
-                // Compile l'application avec Maven
-                sh "cd demo"
-                sh "${MAVEN_HOME}/bin/mvn clean package"
+            //Buid Project Jar
+            stage('Build Jar ') {
+                agent {
+                //Go to take maven from docker
+                    docker {
+                        image 'maven'
+                        args '-u root'
+                    }
+                }
+                //buid jar
+                steps {
+                    sh 'mvn clean install -DskipTests'
+                }
             }
-        }
-//
-//         stage('Test') {
-//             steps {
-//                 // Exécute les tests unitaires
-//                 sh "cd demo"
-//                 sh "${MAVEN_HOME}/bin/mvn test"
-//             }
-//         }
-
-//         stage('Build Docker Image') {
-//             steps {
-//                 // Construit une image Docker à partir du Dockerfile
-//                 sh 'docker build -t my-spring-boot-app .'
-//             }
-//         }
-
-        stage('Deploy to Docker') {
-            steps {
-                // Déploie le conteneur Docker
-                sh "cd demo"
-                sh 'docker compose up -d'
-                //sh 'docker run -d -p 8080:8080 my-spring-boot-app'
-            }
-        }
     }
 
     post {
